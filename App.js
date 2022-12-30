@@ -18,6 +18,7 @@ import DocumentPicker from 'react-native-document-picker';
 import Dialog from "react-native-dialog";
 import Video from 'react-native-video';
 import folderIcon from './assets/folder_Icon.png';
+import axios from 'axios';
 
 const win = Dimensions.get('window');
 
@@ -153,13 +154,22 @@ const App: () => Node = () => {
 
       const data = new FormData();
       data.append("file", fileData);
+      data.append("name", res.name);
+      data.append("type", res.type);
 
-      await fetch(`${urlPrefix}/api/file-upload/${encodeURIComponent(currentPathArray.join('/')) !=='' ? encodeURIComponent(currentPathArray.join('/')) : encodeURIComponent('/')}`, {
-        method: "POST",
-        body: data,
-      });
+      axios.post(`${urlPrefix}/api/file-upload/${encodeURIComponent(currentPathArray.join('/')) !=='' ? encodeURIComponent(currentPathArray.join('/')) : encodeURIComponent('/')}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      // await fetch(`${urlPrefix}/api/file-upload/${encodeURIComponent(currentPathArray.join('/')) !=='' ? encodeURIComponent(currentPathArray.join('/')) : encodeURIComponent('/')}`, {
+      //   method: "POST",
+      //   body: data,
+      // });
+
+      alert('uploaded')
 
     } catch (error) {
+      alert('upload falied')
       console.log(error)
     }
   }
